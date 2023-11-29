@@ -58,7 +58,7 @@ public class TransferController {
         return beneficiaryData;
     }
 	
-    @GetMapping("/accounts/number/{accountNumber}")
+    @GetMapping("/accounts/{accountNumber}")
     public ResponseEntity<AccountDTO> getAccountByNumber(@PathVariable String accountNumber) {
     	
         AccountDTO accountDTO = accountService.getAccountByNumber(accountNumber);
