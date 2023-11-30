@@ -1,8 +1,10 @@
-package com.crud.spring.bank.service;
+package com.crud.spring.bank.servicetest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ import com.crud.spring.bank.dao.AccountDAO;
 import com.crud.spring.bank.dto.AccountDTO;
 import com.crud.spring.bank.entity.Account;
 import com.crud.spring.bank.mapper.AccountMapper;
+import com.crud.spring.bank.service.AccountService;
 
 @SpringBootTest
 public class AccountServiceImplTest {
@@ -75,12 +78,33 @@ public class AccountServiceImplTest {
     
     @Test
     public void testGetAllAccounts() {
-        List<Account> mockAccounts = new ArrayList<>();
+        /*
+    	List<Account> mockAccounts = new ArrayList<>();
         when(accountDAO.findAll()).thenReturn(mockAccounts);
 
         List<AccountDTO> accList = accountService.getAllAccounts();
 
         assertNotNull(accList);
+        */
+    	
+    	// Arrange
+        List<Account> mockAccounts = new ArrayList<>();
+        mockAccounts.add(new Account("1234567891234567", BigDecimal.valueOf(1000)));
+        mockAccounts.add(new Account("7654321987654321", BigDecimal.valueOf(500)));
+
+        when(accountDAO.findAll()).thenReturn(mockAccounts);
+        when(accountMapper.toDTO(any(Account.class))).thenAnswer(invocation -> {
+            Account account = invocation.getArgument(0);
+            return new AccountDTO(account.getAccountNumber(), account.getBalance());
+        });
+
+        // Act
+        List<AccountDTO> result = accountService.getAllAccounts();
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, result.size());
+    	
     }
 
 }

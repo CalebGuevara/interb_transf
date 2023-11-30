@@ -12,11 +12,19 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountDTO {
-	
+
 	private Long id;
 	
 	private String accountNumber;
 	
     private BigDecimal balance;
+
+	public AccountDTO(String accountNumber, BigDecimal balance) {
+		super();
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+	}
+    
+    
 	
 }

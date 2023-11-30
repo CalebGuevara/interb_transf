@@ -30,4 +30,13 @@ public class Account {
     
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
+
+	public Account(String accountNumber, BigDecimal balance) {
+		super();
+		this.accountNumber = accountNumber;
+		this.balance = balance;
+	}
+    
+    
+    
 }

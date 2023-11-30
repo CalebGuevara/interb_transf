@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +62,13 @@ public class TransferController {
     @GetMapping("/accounts/{accountNumber}")
     public ResponseEntity<AccountDTO> getAccountByNumber(@PathVariable String accountNumber) {
     	
-        AccountDTO accountDTO = accountService.getAccountByNumber(accountNumber);
+    	AccountDTO accountDTO;
+    	
+    	try {
+			accountDTO = accountService.getAccountByNumber(accountNumber);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+		}
         
         return ResponseEntity.ok(accountDTO);
     }
@@ -77,8 +84,14 @@ public class TransferController {
 	@GetMapping("accounts/id/{accountId}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long accountId) {
 		
-        AccountDTO accountDTO = accountService.getAccountById(accountId);
-        
+		AccountDTO accountDTO;
+		
+		try {
+			accountDTO = accountService.getAccountById(accountId);
+		}catch (IllegalArgumentException ex) {
+			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+		}
+		
         return ResponseEntity.ok(accountDTO);
     }
 }
