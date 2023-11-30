@@ -36,9 +36,10 @@ public class AccountServiceImplTest {
     public void testGetAccountByNumberAccountTrue() {
 
         String accountNumber = "1234567891234567";
-        Account mockAccount = new Account();
-        when(accountDAO.findByAccountNumber(accountNumber)).thenReturn(mockAccount);
-        when(accountMapper.toDTO(mockAccount)).thenReturn(new AccountDTO());
+        Account tAccount = new Account();
+        
+        when(accountDAO.findByAccountNumber(accountNumber)).thenReturn(tAccount);
+        when(accountMapper.toDTO(tAccount)).thenReturn(new AccountDTO());
 
         AccountDTO accDTO = accountService.getAccountByNumber(accountNumber);
 
@@ -49,6 +50,7 @@ public class AccountServiceImplTest {
     public void testGetAccountByNumberAccountFalse() {
 
         String accountNumber = ":)";
+        
         when(accountDAO.findByAccountNumber(accountNumber)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> accountService.getAccountByNumber(accountNumber));
@@ -58,9 +60,10 @@ public class AccountServiceImplTest {
     public void testGetAccountByIdAccountTrue() {
 
         Long accountId = 1L;
-        Account mockAccount = new Account();
-        when(accountDAO.findById(accountId)).thenReturn(Optional.of(mockAccount));
-        when(accountMapper.toDTO(mockAccount)).thenReturn(new AccountDTO());
+        Account tAccount = new Account();
+        
+        when(accountDAO.findById(accountId)).thenReturn(Optional.of(tAccount));
+        when(accountMapper.toDTO(tAccount)).thenReturn(new AccountDTO());
 
         AccountDTO accDTO = accountService.getAccountById(accountId);
 
@@ -71,6 +74,7 @@ public class AccountServiceImplTest {
     public void testGetAccountByIdAccountFalse() {
 
         Long accountId = 404L;
+        
         when(accountDAO.findById(accountId)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> accountService.getAccountById(accountId));
@@ -86,24 +90,22 @@ public class AccountServiceImplTest {
 
         assertNotNull(accList);
         */
-    	
-    	// Arrange
-        List<Account> mockAccounts = new ArrayList<>();
-        mockAccounts.add(new Account("1234567891234567", BigDecimal.valueOf(1000)));
-        mockAccounts.add(new Account("7654321987654321", BigDecimal.valueOf(500)));
 
-        when(accountDAO.findAll()).thenReturn(mockAccounts);
+        List<Account> tAccounts = new ArrayList<>();
+        
+        tAccounts.add(new Account("1234567891234567", BigDecimal.valueOf(1000)));
+        tAccounts.add(new Account("7654321987654321", BigDecimal.valueOf(500)));
+
+        when(accountDAO.findAll()).thenReturn(tAccounts);
         when(accountMapper.toDTO(any(Account.class))).thenAnswer(invocation -> {
-            Account account = invocation.getArgument(0);
-            return new AccountDTO(account.getAccountNumber(), account.getBalance());
+            Account acc = invocation.getArgument(0);
+            return new AccountDTO(acc.getAccountNumber(), acc.getBalance());
         });
 
-        // Act
-        List<AccountDTO> result = accountService.getAllAccounts();
+        List<AccountDTO> list = accountService.getAllAccounts();
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
+        assertNotNull(list);
+        assertEquals(2, list.size());
     	
     }
 

@@ -34,22 +34,25 @@ public class TransferControllerTest {
 
     private AccountDTO createAccountDTO(String accountNumber, BigDecimal balance) {
         AccountDTO accountDTO = new AccountDTO();
+        
         accountDTO.setAccountNumber(accountNumber);
         accountDTO.setBalance(balance);
+        
         return accountDTO;
     }
 
     @Test
     public void testGetAccountByNumberSuccess() {
-        AccountDTO accountDTO = createAccountDTO("SoyUnNumeroDeCuentaReal", BigDecimal.valueOf(1000));
-        when(accountService.getAccountByNumber("SoyUnNumeroDeCuentaReal")).thenReturn(accountDTO);
+        AccountDTO accDTO = createAccountDTO("SoyUnNumeroDeCuentaReal", BigDecimal.valueOf(1000));
+        
+        when(accountService.getAccountByNumber("SoyUnNumeroDeCuentaReal")).thenReturn(accDTO);
 
         ResponseEntity<AccountDTO> responseEntity = transferController.getAccountByNumber("SoyUnNumeroDeCuentaReal");
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals(accountDTO, responseEntity.getBody());
+        assertEquals(accDTO, responseEntity.getBody());
     }
 
     @Test
@@ -65,15 +68,16 @@ public class TransferControllerTest {
 
     @Test
     public void testGetAccountByIdSuccess() {
-        AccountDTO accountDTO = createAccountDTO("SoyUnaCuentaDeId1", BigDecimal.valueOf(1000));
-        when(accountService.getAccountById(1L)).thenReturn(accountDTO);
+        AccountDTO accDTO = createAccountDTO("SoyUnaCuentaDeId1", BigDecimal.valueOf(1000));
+        
+        when(accountService.getAccountById(1L)).thenReturn(accDTO);
 
         ResponseEntity<AccountDTO> responseEntity = transferController.getAccountById(1L);
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals(accountDTO, responseEntity.getBody());
+        assertEquals(accDTO, responseEntity.getBody());
     }
 
     @Test
@@ -88,17 +92,18 @@ public class TransferControllerTest {
 
     @Test
     public void testGetAllAccounts() {
-        List<AccountDTO> accountDTOs = Arrays.asList(
+        List<AccountDTO> accDTOs = Arrays.asList(
                 createAccountDTO("acc1", BigDecimal.valueOf(1000)),
                 createAccountDTO("acc2", BigDecimal.valueOf(500))
         );
-        when(accountService.getAllAccounts()).thenReturn(accountDTOs);
+        
+        when(accountService.getAllAccounts()).thenReturn(accDTOs);
 
         ResponseEntity<List<AccountDTO>> responseEntity = transferController.getAllAccounts();
 
         assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals(accountDTOs, responseEntity.getBody());
+        assertEquals(accDTOs, responseEntity.getBody());
     }
 }
