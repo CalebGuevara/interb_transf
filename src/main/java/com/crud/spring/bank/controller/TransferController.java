@@ -23,13 +23,13 @@ import com.crud.spring.bank.service.TransferService;
 @RestController
 @RequestMapping("/api")
 public class TransferController {
-	
+
 	@Autowired
     private TransferService transferService;
-	
+
 	@Autowired
 	private AccountService accountService;
-	
+
 	@PostMapping("/transfer")
 	public ResponseEntity<Map<String, Object>> startTransfer(@RequestBody TransferDTO transferDTO) {
         // Lógica para realizar la transferencia
@@ -49,7 +49,7 @@ public class TransferController {
         // Respuesta
         return ResponseEntity.ok(response);
     }
-	
+
 	private Map<String, Object> getBeneficiaryData(AccountDTO destinationAccountDTO) {
         // Datos del beneficiario
         Map<String, Object> beneficiaryData = new HashMap<>();
@@ -58,40 +58,40 @@ public class TransferController {
 
         return beneficiaryData;
     }
-	
+
     @GetMapping("/accounts/{accountNumber}")
     public ResponseEntity<AccountDTO> getAccountByNumber(@PathVariable String accountNumber) {
-    	
+
     	AccountDTO accountDTO;
-    	
+
     	try {
 			accountDTO = accountService.getAccountByNumber(accountNumber);
 		} catch (IllegalArgumentException ex) {
 			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
 		}
-        
+
         return ResponseEntity.ok(accountDTO);
     }
 
     @GetMapping("/accounts")
     public ResponseEntity<List<AccountDTO>> getAllAccounts() {
-    	
+
         List<AccountDTO> accountDTOs = accountService.getAllAccounts();
-        
+
         return new ResponseEntity<>(accountDTOs, HttpStatus.OK);
     }
-    
+
 	@GetMapping("accounts/id/{accountId}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long accountId) {
-		
+
 		AccountDTO accountDTO;
-		
+
 		try {
 			accountDTO = accountService.getAccountById(accountId);
 		}catch (IllegalArgumentException ex) {
 			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
 		}
-		
+
         return ResponseEntity.ok(accountDTO);
     }
 }
