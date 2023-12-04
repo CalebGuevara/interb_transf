@@ -1,4 +1,4 @@
-package com.crud.spring.bank.servicetest;
+package com.crud.spring.bank.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

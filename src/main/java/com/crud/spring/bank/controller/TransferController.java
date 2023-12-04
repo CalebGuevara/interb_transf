@@ -19,13 +19,14 @@ import com.crud.spring.bank.dto.AccountDTO;
 import com.crud.spring.bank.dto.TransferDTO;
 import com.crud.spring.bank.service.AccountService;
 import com.crud.spring.bank.service.TransferService;
+import com.crud.spring.bank.service.TransferServiceImpl;
 
 @RestController
 @RequestMapping("/api")
 public class TransferController {
 
 	@Autowired
-    private TransferService transferService;
+    private TransferServiceImpl transferServiceImpl;
 
 	@Autowired
 	private AccountService accountService;
@@ -33,8 +34,13 @@ public class TransferController {
 	@PostMapping("/transfer")
 	public ResponseEntity<Map<String, Object>> startTransfer(@RequestBody TransferDTO transferDTO) {
         // Lógica para realizar la transferencia
-		transferService.validateTransfer(transferDTO);
-        transferService.startTransfer(transferDTO);
+		try {
+			transferServiceImpl.validateTransfer(transferDTO);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		transferServiceImpl.startTransfer(transferDTO);
 
         // Get de datos despues de la transferencia
         AccountDTO sourceAccountDTO = accountService.getAccountByNumber(transferDTO.getSourceAccount().getAccountNumber());

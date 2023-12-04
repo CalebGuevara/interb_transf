@@ -48,16 +48,19 @@ public class TransferServiceImpl implements TransferService{
 
         // Guardar transferencia
         Transfer tEntity = transferMapper.toEntity(transferDTO);
-        tEntity.getSourceAccount().setId(sourceAccount.getId());
-        tEntity.getDestinationAccount().setId(destinationAccount.getId());
+        if (tEntity != null && tEntity.getSourceAccount() != null) {
+            tEntity.getSourceAccount().setId(sourceAccount.getId());
+        }
+        if (tEntity != null && tEntity.getDestinationAccount() != null) {
+            tEntity.getDestinationAccount().setId(destinationAccount.getId());
+        }
         transferRepository.save(tEntity);
-		
 	}
 
 	@Override
 	public void validateTransfer(TransferDTO transferDTO) {
 		
-		if (transferDTO.getSourceAccount().equals(transferDTO.getDestinationAccount())) {
+		if (transferDTO.getSourceAccount().getAccountNumber().equals(transferDTO.getDestinationAccount().getAccountNumber())) {
             throw new IllegalArgumentException("Cannot transfer to your own account");
         }
 		

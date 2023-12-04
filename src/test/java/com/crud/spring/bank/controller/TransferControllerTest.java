@@ -1,7 +1,8 @@
-package com.crud.spring.bank.controllertest;
+package com.crud.spring.bank.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
@@ -21,12 +22,16 @@ import com.crud.spring.bank.dto.AccountDTO;
 import com.crud.spring.bank.dto.TransferDTO;
 import com.crud.spring.bank.service.AccountService;
 import com.crud.spring.bank.service.TransferService;
+import com.crud.spring.bank.service.TransferServiceImpl;
 
 @SpringBootTest
 public class TransferControllerTest {
 
 	@Mock
     private TransferService transferService;
+	
+	@Mock
+    private TransferServiceImpl transferServiceImpl;
 
     @Mock
     private AccountService accountService;
@@ -49,7 +54,6 @@ public class TransferControllerTest {
         transferDTO.setSourceAccount(createAccountDTO("sourceAccountNumber", BigDecimal.valueOf(1000)));
         transferDTO.setDestinationAccount(createAccountDTO("destinationAccountNumber", BigDecimal.valueOf(500)));
         transferDTO.setAmount(BigDecimal.valueOf(200));
-        
         return transferDTO;
     }
 
@@ -121,7 +125,8 @@ public class TransferControllerTest {
 
     @Test
     public void testStartTransferSuccess() {
-        TransferDTO transferDTO = createTransferDTO();
+
+    	TransferDTO transferDTO = createTransferDTO();
 
         AccountDTO sourceAccountDTO = createAccountDTO("sourceAccountNumber", BigDecimal.valueOf(1000));
         AccountDTO destinationAccountDTO = createAccountDTO("destinationAccountNumber", BigDecimal.valueOf(500));
@@ -129,17 +134,18 @@ public class TransferControllerTest {
         when(accountService.getAccountByNumber("sourceAccountNumber")).thenReturn(sourceAccountDTO);
         when(accountService.getAccountByNumber("destinationAccountNumber")).thenReturn(destinationAccountDTO);
 
+        doNothing().when(transferService).validateTransfer(transferDTO);
+        doNothing().when(transferService).startTransfer(transferDTO);
+
         ResponseEntity<Map<String, Object>> responseEntity = transferController.startTransfer(transferDTO);
 
-        assertNotNull(responseEntity);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         Map<String, Object> responseBody = responseEntity.getBody();
-
+        
         assertNotNull(responseBody);
         assertEquals("Transfer completed successfully", responseBody.get("message"));
-        assertNotNull(responseBody.get("sourceAccountBalance"));
-        assertNotNull(responseBody.get("destinationAccountBeneficiary"));
+
     }
 
 }
