@@ -37,7 +37,7 @@ public class AccountServiceImplTest {
 
         String accountNumber = "1234567891234567";
         Account tAccount = new Account();
-        
+
         when(accountDAO.findByAccountNumber(accountNumber)).thenReturn(tAccount);
         when(accountMapper.toDTO(tAccount)).thenReturn(new AccountDTO());
 
@@ -50,12 +50,12 @@ public class AccountServiceImplTest {
     public void testGetAccountByNumberAccountFalse() {
 
         String accountNumber = ":)";
-        
+
         when(accountDAO.findByAccountNumber(accountNumber)).thenReturn(null);
 
         assertThrows(IllegalArgumentException.class, () -> accountService.getAccountByNumber(accountNumber));
     }
-    
+
     @Test
     public void testGetAccountByIdAccountTrue() {
 
@@ -79,17 +79,9 @@ public class AccountServiceImplTest {
 
         assertThrows(IllegalArgumentException.class, () -> accountService.getAccountById(accountId));
     }
-    
+
     @Test
     public void testGetAllAccounts() {
-        /*
-    	List<Account> mockAccounts = new ArrayList<>();
-        when(accountDAO.findAll()).thenReturn(mockAccounts);
-
-        List<AccountDTO> accList = accountService.getAllAccounts();
-
-        assertNotNull(accList);
-        */
 
         List<Account> tAccounts = new ArrayList<>();
         
@@ -106,7 +98,6 @@ public class AccountServiceImplTest {
 
         assertNotNull(list);
         assertEquals(2, list.size());
-    	
     }
 
 }

@@ -22,7 +22,7 @@ import com.crud.spring.bank.service.TransferService;
 import com.crud.spring.bank.service.TransferServiceImpl;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/SEDE1")
 public class TransferController {
 
 	@Autowired
@@ -40,7 +40,12 @@ public class TransferController {
 			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
 		}
 		
-		transferServiceImpl.startTransfer(transferDTO);
+		try {
+			transferServiceImpl.startTransfer(transferDTO);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+		}
+		
 
         // Get de datos despues de la transferencia
         AccountDTO sourceAccountDTO = accountService.getAccountByNumber(transferDTO.getSourceAccount().getAccountNumber());
